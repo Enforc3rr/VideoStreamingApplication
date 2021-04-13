@@ -5,7 +5,7 @@ This Project uses
 2) Nodejs for Playback
 
 ### Backend Architecture / System's Design
-[System's Design](Architecture1.jpg)
+![System's Design](Architecture1.JPG)
 
 ### Things That work 
 1) Conversion Of Videos To Different Resolution
