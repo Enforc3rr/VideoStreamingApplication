@@ -7,8 +7,8 @@ This Project uses
 ### Backend Architecture / System's Design
 ![System's Design](Architecture1.JPG)
 
-### Things That work 
-1) Conversion Of Videos To Different Resolution
+### Things Are Needed To Be Implemented In Future 
+1) Authentication-Authorization
+2) User Interface
 
-### Things That Don't work 
-1) Video Playback
+
