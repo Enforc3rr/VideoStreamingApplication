@@ -4,6 +4,9 @@ This Project uses
 1) Java for Upload and Conversion Of videos to Different Resolution Process
 2) Nodejs for Playback
 
+### Backend Architecture / System's Design
+[System's Design](Architecture1.jpg)
+
 ### Things That work 
 1) Conversion Of Videos To Different Resolution
 
