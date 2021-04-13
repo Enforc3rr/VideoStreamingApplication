@@ -7,7 +7,7 @@ This Project uses
 ### Backend Architecture / System's Design
 ![System's Design](Architecture1.JPG)
 
-### Things Are Needed To Be Implemented In Future 
+### Things Needed To Be Implemented In Future 
 1) Authentication-Authorization
 2) User Interface
 
