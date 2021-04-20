@@ -10,8 +10,10 @@ exports.getVideos = async (req, res, next) =>{
     const videoDetail = [];
 
     videoData.forEach(data =>{
-        const {videoUploadedBy,captionOfVideo,uploadTime} = data;
+        const {videoUploadedBy,captionOfVideo,uploadTime , _id,fileName} = data;
         const video = {
+            id : _id ,
+            fName : fileName ,
             caption : captionOfVideo,
             uploadedBy : videoUploadedBy,
             uploadTime : uploadTime
@@ -23,48 +25,43 @@ exports.getVideos = async (req, res, next) =>{
 };
 /*
 Header Contains -
-ID of Video To be Played
+Range :bytes=0-
 Playback Resolution which will decide and request for the resolution of file .
 */
-exports.playVideo = (req,res,next)=>{
-    if(req.headers.playbackresolution==='480p'){
-        playbackOptions(req,res);
-    }else if(req.headers.playbackresolution==='1080p'){
 
-    }else{
-
-    }
-};
-const findFileName = async (_id)=>{
-    const file = await mongodb.findById(_id);
-    let anotherFile = {};
-    anotherFile = file;
-    log(anotherFile.)
-}
-
-const playbackOptions = (req,res)=>{
-    const resolution = req.headers.playbackresolution;
+exports.playVideo = async (req,res,next)=>{
+    const playbackResolution = req.headers.playbackresolution;
+    // const playbackResolution = "1080p";
     const range = req.headers.range;
-    const fileName = findFileName(req.headers.idofvideo);
-    // const videoPath = `D:\\Programs\\VideoStreamingApplication\\Backend\\VideoUploads
-    // \\${resolution}\\${resolution}1618224406803-VID_20210411_160457.mp4`;
-    const videoPath = "D:\\Programs\\VideoStreamingApplication\\Backend\\VideoUploads" +
-        "\\480p\\480p1618227327075-VID_20210411_161628.mp4";
-    const fileSize = fs.statSync(videoPath).size;
-    let chunkSize = 0;
-    if(resolution==='480p'){
+    let flName = await findFileName(req.params.id);
+    if(!range){
+        res.status(400).json({message:"Range In Header Is Required"});
+    }
+    if(!playbackResolution){
+        res.status(400).json({message:"Playback Resolution In Header Is Required"});
+    }
+    let chunkSize = 0 ;
+    if(playbackResolution==="480p"){
         chunkSize = 10001;
-    }else if(resolution === '1080p'){
+    }else if(playbackResolution==="1080p"){
         chunkSize = 100001;
     }else{
-        chunkSize = 1001;
+        chunkSize = 10001;
     }
+    //Range = bytes=1234-
+    const videoPath = `D:\\Programs\\VideoStreamingApplication\\Backend\\VideoUploads\\${playbackResolution}\\${playbackResolution}${flName}`;
+    console.log(videoPath);
+    console.log(videoPath);
+    const videoSize = fs.statSync(videoPath).size;
+
+
     const start = Number(range.replace(/\D/g,""));
-    const end = Math.min(chunkSize+start,fileSize-1);
+    const end = Math.min(chunkSize+start,videoSize-1);
 
     const contentLength = end - start + 1 ;
+
     const headers = {
-        "Content-Range":`bytes ${start}-${end}/${fileSize}`,
+        "Content-Range":`bytes ${start}-${end}/${videoSize}`,
         "Accept-Range":"bytes",
         "Content-Length":contentLength,
         "Content-Type":"video/mp4",
@@ -72,4 +69,11 @@ const playbackOptions = (req,res)=>{
     res.writeHead(206,headers);
     const videoStream = fs.createReadStream(videoPath,{"start":start ,"end":end});
     videoStream.pipe(res);
+};
+const findFileName = async (_id)=>{
+    const fName = await mongodb.findById(_id);
+    return fName.fileName;
+}
+exports.videoPlayBackEndPointTest = (req,res,next)=>{
+    res.sendFile("D:\\Programs\\VideoStreamingApplication\\Backend\\Nodejs\\VideoPlayBackEndPointTest\\"+"Test.html");
 }

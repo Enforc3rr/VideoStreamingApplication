@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
+    fileName : String ,
+    videoId : String ,
     captionOfVideo : String ,
     videoUploadedBy : String ,
     uploadTime : String
