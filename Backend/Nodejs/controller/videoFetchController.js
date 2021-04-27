@@ -28,7 +28,6 @@ Header Contains -
 Range :bytes=0-
 Playback Resolution which will decide and request for the resolution of file .
 */
-
 exports.playVideo = async (req,res,next)=>{
     const playbackResolution = req.headers.playbackresolution;
     // const playbackResolution = "1080p";
@@ -50,8 +49,6 @@ exports.playVideo = async (req,res,next)=>{
     }
     //Range = bytes=1234-
     const videoPath = `D:\\Programs\\VideoStreamingApplication\\Backend\\VideoUploads\\${playbackResolution}\\${playbackResolution}${flName}`;
-    console.log(videoPath);
-    console.log(videoPath);
     const videoSize = fs.statSync(videoPath).size;
 
 

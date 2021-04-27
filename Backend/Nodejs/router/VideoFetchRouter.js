@@ -5,10 +5,10 @@ const router = Express.Router();
 const {getVideos , playVideo , videoPlayBackEndPointTest } = require("../controller/videoFetchController");
 
 
-router.route("/api/fetch")
+router.route("/fetch")
     .get(getVideos);
 
-router.route("/video/playback/:id")
+router.route("/playback/:id")
     .get(playVideo);
 
 //For PlaybackTesting Purpose

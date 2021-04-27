@@ -22,7 +22,7 @@ public class ResponseEntity {
     private String uploadStatus;
     private String uploadMessage;
     private String uploadReason;
-    private String videoName;
+    private String fileName;
     private long videoLength;
     private String UploadTime;
 
@@ -30,13 +30,20 @@ public class ResponseEntity {
     }
 
     public ResponseEntity(String uploadStatus, String uploadMessage, String uploadReason,
-                          String videoName, long videoLength, String uploadTime) {
+                          String fileName, long videoLength, String uploadTime) {
         this.uploadStatus = uploadStatus;
         this.uploadMessage = uploadMessage;
         this.uploadReason = uploadReason;
-        this.videoName = videoName;
+        this.fileName = fileName;
         this.videoLength = videoLength;
         this.UploadTime = uploadTime;
+    }
+
+    public ResponseEntity(String uploadStatus, String uploadMessage, String uploadReason, String fileName) {
+        this.uploadStatus = uploadStatus;
+        this.uploadMessage = uploadMessage;
+        this.uploadReason = uploadReason;
+        this.fileName = fileName;
     }
 
     public long getVideoLength() {
@@ -56,11 +63,11 @@ public class ResponseEntity {
     }
 
     public String getVideoName() {
-        return videoName;
+        return fileName;
     }
 
     public void setVideoName(String videoName) {
-        this.videoName = videoName;
+        this.fileName = videoName;
     }
 
     public String getUploadStatus() {

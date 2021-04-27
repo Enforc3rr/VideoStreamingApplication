@@ -66,24 +66,18 @@ public class VideoUploadController {
                 e.printStackTrace();
             }
         });
-        Thread conversionTo1080p = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    conversionTo1080p(fileEntity.getFileName());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        Thread conversionTo1080p = new Thread(() -> {
+            try {
+                conversionTo1080p(fileEntity.getFileName());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
-        Thread conversionTo240p = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    conversionTo240p(fileEntity.getFileName());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        Thread conversionTo240p = new Thread(() -> {
+            try {
+                conversionTo240p(fileEntity.getFileName());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
         conversionTo240p.start();
