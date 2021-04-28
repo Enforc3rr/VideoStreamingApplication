@@ -68,4 +68,14 @@ public class FileEntity {
         this.uploadTime = uploadTime;
     }
 
+    @Override
+    public String toString() {
+        return "FileEntity{" +
+                "fileName='" + fileName + '\'' +
+                ", videoLength=" + videoLength +
+                ", videoUploadedBy='" + videoUploadedBy + '\'' +
+                ", captionOfVideo='" + captionOfVideo + '\'' +
+                ", uploadTime='" + uploadTime + '\'' +
+                '}';
+    }
 }

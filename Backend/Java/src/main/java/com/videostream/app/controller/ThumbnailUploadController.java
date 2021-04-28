@@ -8,15 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Date;
 
 @RestController
 @RequestMapping("/video")
@@ -27,55 +21,43 @@ public class ThumbnailUploadController {
     public ThumbnailUploadController(ThumbnailRepo thumbnailRepo) {
         this.thumbnailRepo = thumbnailRepo;
     }
+
     @PostMapping(value = "/thumbnailUpload")
-    public ResponseEntity thumbnailUpload(@RequestParam("json") String thumbnailString,@RequestParam("thumbnail") MultipartFile thumbnail) throws IOException {
+    public ResponseEntity thumbnailUpload(@RequestParam("json") String thumbnailString, @RequestParam("thumbnail") MultipartFile thumbnail) throws IOException {
         //De-serialize The JSON data which is received .
-        ThumbnailEntity thumbnailEntity = new ObjectMapper().readValue(thumbnailString,ThumbnailEntity.class);
-        String tempThumbnailStorage = "D:\\Programs\\VideoStreamingApplication\\Backend\\ThumbnailUploads\\Temp\\";
+        ThumbnailEntity thumbnailEntity = new ObjectMapper().readValue(thumbnailString, ThumbnailEntity.class);
         String thumbnailStorage = "D:\\Programs\\VideoStreamingApplication\\Backend\\ThumbnailUploads\\";
         String thumbnailExtension = thumbnail.getOriginalFilename().split("\\.")[1];
-        String thumbnailName = thumbnailEntity.getThumbnailName()+"."+thumbnailExtension;
+        String thumbnailName = thumbnailEntity.getThumbnailName() + "." + thumbnailExtension;
+        String tempThumbnailStorage = "D:\\Programs\\VideoStreamingApplication\\Backend\\ThumbnailUploads\\Temp\\" + thumbnailName;
 
-        File thumbFile = new File(tempThumbnailStorage+thumbnailName);
-
+        File thumbFile = new File(tempThumbnailStorage);
         thumbnail.transferTo(thumbFile);
 
-        System.out.println(thumbnailEntity);
-        Path sourceOfTempThumbnail = Paths.get(tempThumbnailStorage+thumbnailName);
-        Path targetOfNewResolutionThumbnail = Paths.get(thumbnailStorage+thumbnailName);
+        int width = 200;    //width of the image
+        int height = 200;   //height of the image
 
-        InputStream inputStream = new FileInputStream(sourceOfTempThumbnail.toFile());
-        resize(inputStream,targetOfNewResolutionThumbnail,854,480,"."+thumbnailExtension);
+        // For storing image in RAM
+        BufferedImage bufferedImage = null;
+        // READ IMAGE
+        File unModifiedThumbnail = new File(tempThumbnailStorage); //image file path
+        /* create an object of BufferedImage type and pass as parameter the width,  height and image int
+           type.TYPE_INT_ARGB means that we are representing the Alpha, Red, Green and Blue component of the
+           image pixel using 8 bit integer value.
+        */
+        bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        // Reading input file
+        bufferedImage = ImageIO.read(unModifiedThumbnail);
+        // WRITE IMAGE
+        // Output file path
+        File modifiedThumbnail = new File(thumbnailStorage+thumbnailName);
+        // Writing to file taking type and path as
+        ImageIO.write(bufferedImage, thumbnailExtension, modifiedThumbnail);
 
-        inputStream.close();
+        this.thumbnailRepo.save(new ThumbnailEntity(thumbnailEntity.getThumbnailName(),thumbnailEntity.getVideoID(),thumbnailExtension));
 
+        thumbFile.delete();
 
-//        this.thumbnailRepo.save(new ThumbnailEntity(thumbnailEntity.getThumbnailName() , thumbnailEntity.getVideoID()));
-
-        return new ResponseEntity("Passed","Thumbnail Uploaded",null,thumbnailEntity.getThumbnailName());
-
-    }
-    private static void resize(InputStream input, Path target,
-                               int width, int height,String fileExtension) throws IOException {
-        BufferedImage originalImage = ImageIO.read(input);
-        Image newResizedImage = originalImage
-                .getScaledInstance(width, height, Image.SCALE_SMOOTH);
-
-        // we want image in png format
-        ImageIO.write(convertToBufferedImage(newResizedImage),
-                fileExtension, target.toFile());
-    }
-    public static BufferedImage convertToBufferedImage(Image img) {
-        if (img instanceof BufferedImage) {
-            return (BufferedImage) img;
-        }
-        // Create a buffered image with transparency
-        BufferedImage bufferedImage = new BufferedImage(
-                img.getWidth(null), img.getHeight(null),
-                BufferedImage.TYPE_INT_ARGB);
-        Graphics2D graphics2D = bufferedImage.createGraphics();
-        graphics2D.drawImage(img, 0, 0, null);
-        graphics2D.dispose();
-        return bufferedImage;
+        return new ResponseEntity("Passed", "Thumbnail Uploaded", null, thumbnailEntity.getThumbnailName());
     }
 }

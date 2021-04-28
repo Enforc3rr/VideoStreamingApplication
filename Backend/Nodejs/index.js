@@ -1,10 +1,10 @@
-const express = require('express');
-const app = express();
+const Express = require('express');
+const app = Express();
 const router = require('./router/VideoFetchRouter');
 const logger = require("morgan");
 const dbConfig = require("./configurations/databaseConfig");
 
-app.use(express.json());
+app.use(Express.json());
 
 dbConfig();
 

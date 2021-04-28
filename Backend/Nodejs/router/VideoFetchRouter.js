@@ -1,8 +1,8 @@
 const Express = require("express");
 
 const router = Express.Router();
-
-const {getVideos , playVideo , videoPlayBackEndPointTest } = require("../controller/videoFetchController");
+const{findThumbnail} = require("../controller/thumbnailFetchController");
+const { getVideos , playVideo ,videoPlayBackEndPointTest } = require("../controller/videoFetchController");
 
 
 router.route("/fetch")
@@ -10,6 +10,9 @@ router.route("/fetch")
 
 router.route("/playback/:id")
     .get(playVideo);
+
+router.route("/thumbnail/:id")
+    .get(findThumbnail);
 
 //For PlaybackTesting Purpose
 router.route("/video/test/:id")

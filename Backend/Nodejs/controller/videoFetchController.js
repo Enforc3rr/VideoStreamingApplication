@@ -1,6 +1,9 @@
 /*
-Title of the video
-Video
+Id Of Video
+File Name
+Title/Caption of the video
+Uploaded By
+Upload Time
 */
 const mongodb = require("../database/videoModel");
 const fs = require("fs");
@@ -71,6 +74,8 @@ const findFileName = async (_id)=>{
     const fName = await mongodb.findById(_id);
     return fName.fileName;
 }
+
+
 exports.videoPlayBackEndPointTest = (req,res,next)=>{
     res.sendFile("D:\\Programs\\VideoStreamingApplication\\Backend\\Nodejs\\VideoPlayBackEndPointTest\\"+"Test.html");
 }
