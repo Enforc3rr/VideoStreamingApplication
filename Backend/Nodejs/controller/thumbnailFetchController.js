@@ -14,6 +14,6 @@ exports.findThumbnail = (req,res,next)=>{
         .catch(()=>{
             res.status(400).json({
                 message : "couldn't load Thumbnail"
-            })
+            });
         });
 }
