@@ -1,9 +1,11 @@
 package com.videostream.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.videostream.app.entities.ResponseEntity;
+import com.videostream.app.entities.ResponseClass;
 import com.videostream.app.entities.ThumbnailEntity;
 import com.videostream.app.repository.ThumbnailRepo;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +25,7 @@ public class ThumbnailUploadController {
     }
 
     @PostMapping(value = "/thumbnailUpload")
-    public ResponseEntity thumbnailUpload(@RequestParam("json") String thumbnailString, @RequestParam("thumbnail") MultipartFile thumbnail) throws IOException {
+    public ResponseEntity<?> thumbnailUpload(@RequestParam("json") String thumbnailString, @RequestParam("thumbnail") MultipartFile thumbnail) throws IOException {
         //De-serialize The JSON data which is received .
         ThumbnailEntity thumbnailEntity = new ObjectMapper().readValue(thumbnailString, ThumbnailEntity.class);
         String thumbnailStorage = "D:\\Programs\\VideoStreamingApplication\\Backend\\ThumbnailUploads\\";
@@ -58,6 +60,7 @@ public class ThumbnailUploadController {
 
         thumbFile.delete();
 
-        return new ResponseEntity("Passed", "Thumbnail Uploaded", null, thumbnailEntity.getThumbnailName());
+        return new ResponseEntity<>(new ResponseClass("Passed", "Thumbnail Uploaded", null, thumbnailEntity.getThumbnailName())
+                , HttpStatus.CREATED);
     }
 }

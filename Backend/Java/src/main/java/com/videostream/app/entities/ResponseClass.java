@@ -17,17 +17,17 @@ Video Name = Renamed Version Of The Video
 */
 
 @Document
-public class ResponseEntity {
+public class ResponseClass {
     private String uploadStatus;
     private String uploadMessage;
     private String uploadReason;
     private String fileName;
     private long videoLength;
     private String UploadTime;
-    public ResponseEntity(){
+    public ResponseClass(){
     }
-    public ResponseEntity(String uploadStatus, String uploadMessage, String uploadReason,
-                          String fileName, long videoLength, String uploadTime) {
+    public ResponseClass(String uploadStatus, String uploadMessage, String uploadReason,
+                         String fileName, long videoLength, String uploadTime) {
         this.uploadStatus = uploadStatus;
         this.uploadMessage = uploadMessage;
         this.uploadReason = uploadReason;
@@ -35,7 +35,7 @@ public class ResponseEntity {
         this.videoLength = videoLength;
         this.UploadTime = uploadTime;
     }
-    public ResponseEntity(String uploadStatus, String uploadMessage, String uploadReason, String fileName) {
+    public ResponseClass(String uploadStatus, String uploadMessage, String uploadReason, String fileName) {
         this.uploadStatus = uploadStatus;
         this.uploadMessage = uploadMessage;
         this.uploadReason = uploadReason;
