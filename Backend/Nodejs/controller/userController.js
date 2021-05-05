@@ -43,8 +43,7 @@ username
     })
 }
 exports.userLogin = async (req,res,next)=>{
-    console.log(req.body.username);
-   const userFound  = await userModel.findOne({username : req.body.username});
+    const userFound  = await userModel.findOne({username : req.body.username});
 
    if(!userFound) return res.status(400).json({
        status : "Failed",
@@ -57,11 +56,16 @@ exports.userLogin = async (req,res,next)=>{
        message : "Incorrect Password",
        successfulLogin : false
    });
-   const token = jwt.sign({
-       userID : userFound._id ,
-       username : userFound.username ,
+   const token = await jwt.sign({
+       // userID : userFound._id ,
+       sub : userFound.username ,
        role : userFound.role
-   },"SecretKey");
+   }, //We basically need to set the sign key in base64 encoding so that it can work with spring boot as spring expects the secret-key to be in that encoding instead of normal UTF-8
+       Buffer.from("secretkey", 'base64'),
+       {expiresIn: "24h"}
+   );// need to replace "secret-key" with process.env.SECRET_KEY and it should of longer length and should be more complex.
+
+   //Made Changes in the sign method and removed the line which put "typ" : "JWT" in the header of the final jwt to make it compatible with spring. .
    res.header("Authorization",token).json({
        jwt : token ,
        successfulLogin : true
