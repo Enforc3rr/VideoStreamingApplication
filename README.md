@@ -4,8 +4,8 @@ These days trend of short videos are on rise youtube recently realsed "Shorts" .
 Unlike Tik-Tok This Application is going to be targeted more towards educational and travel content ( [FireShip.io](https://www.youtube.com/channel/UCsBjURrPoezykLs9EqgamOA) is the living example that educational videos don't need to be long to make it's point)
 
 ### Tech Stack
-It uses Server Side Capabilities of Nodejs and Spring Boot. 
-This Project uses 
+This Project uses uses Server Side Capabilities of Nodejs and Spring Boot.       
+Reasons To Use ->    
 1) Java for Upload and Conversion Of videos to Different Resolution Process
 2) Nodejs for Playback
 
