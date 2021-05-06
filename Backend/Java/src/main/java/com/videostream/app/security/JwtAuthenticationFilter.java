@@ -18,7 +18,7 @@ import java.io.IOException;
 /*
 To understand what this class does and why i have implemented certain methods
 pls refer to ->
-https://github.com/Enforc3rr/JWT-Spring-Boot/blob/master/src/main/java/com/jwtexample/jwt/security/JwtAuthenticationFilter.java
+@link https://github.com/Enforc3rr/JWT-Spring-Boot/blob/master/src/main/java/com/jwtexample/jwt/security/JwtAuthenticationFilter.java
 
 AS , This repo contains comments which explains why have i implemented and called certain methods.
 */
