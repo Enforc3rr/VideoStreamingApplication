@@ -2,7 +2,7 @@ package com.videostream.app.controller;
 
 import com.coremedia.iso.IsoFile;
 import com.videostream.app.entities.FileEntity;
-import com.videostream.app.entities.ResponseClass;
+import com.videostream.app.service.ResponseClass;
 import com.videostream.app.repository.FileRepo;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
@@ -25,7 +25,6 @@ public class VideoUploadController {
 
     final
     FileRepo fileRepo;
-    //video/upload
 
     public VideoUploadController(FileRepo fileRepo) {
         this.fileRepo = fileRepo;
@@ -35,7 +34,6 @@ public class VideoUploadController {
     @route POST /video/upload
     @Response
     */
-
     @PostMapping(value = "/upload")
     public ResponseEntity<?> videoUpload(@RequestParam("video")MultipartFile video) throws IOException{
 
@@ -53,10 +51,31 @@ public class VideoUploadController {
 
        if(lengthOfVideo >= 120){
            Files.deleteIfExists(Paths.get(videoStorage+video.getOriginalFilename()));
+           /*
+           @StatusCode 400 ( Bad_Request )
+           @Response If Upload Failed ( actual variable names are being used here){
+           uploadStatus : Failed
+           uploadMessage : File Not Uploaded
+           uploadReason : Enter A Video Of Less Than 120 Seconds
+           fileName : null
+           videoLength : 0
+           uploadTime : null
+           }
+            */
            return new ResponseEntity<>(new ResponseClass("Failed","File Not Uploaded"
-                   ,"Enter A Video Less Than 120 Seconds",null,0,null),
+                   ,"Enter A Video Of Less Than 120 Seconds",null,0,null),
                    HttpStatus.BAD_REQUEST);
        }else{
+          /*
+          @StatusCode 201 ( Created )
+           @Response If Upload Is Successful (actual variable names are being used here)
+           uploadStatus = Passed
+           uploadMessage = File Uploaded
+           uploadReason = null
+           fileName = time at which video was uploaded in ms
+           videoLength = length of video
+           uploadTime = current time
+            */
            return new ResponseEntity<>( new ResponseClass("Passed","File Uploaded"
                    ,null,fileName,lengthOfVideo,date.toString()),
                    HttpStatus.CREATED);
@@ -72,7 +91,7 @@ public class VideoUploadController {
     Upload Time
     */
     @PostMapping(value = "/details", consumes = "application/json")
-    public void videoDetails(@RequestBody FileEntity fileEntity) throws IOException {
+    public void videoDetails(@RequestBody FileEntity fileEntity) {
 
         this.fileRepo.save(new FileEntity(fileEntity.getFileName(),fileEntity.getVideoLength(),fileEntity.getVideoUploadedBy()
          , fileEntity.getCaptionOfVideo() , fileEntity.getUploadTime()));
@@ -98,6 +117,10 @@ public class VideoUploadController {
                 e.printStackTrace();
             }
         });
+        /*
+        Different Methods have been used for different resolutions because in future i have planned to change
+        the encoding and some other details for different resolutions.
+         */
         conversionTo240p.start();
         conversionTo480p.start();
         conversionTo1080p.start();

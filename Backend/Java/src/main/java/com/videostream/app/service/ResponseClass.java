@@ -1,4 +1,4 @@
-package com.videostream.app.entities;
+package com.videostream.app.service;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -24,6 +24,7 @@ public class ResponseClass {
     private String fileName;
     private long videoLength;
     private String UploadTime;
+
     public ResponseClass(){
     }
     public ResponseClass(String uploadStatus, String uploadMessage, String uploadReason,

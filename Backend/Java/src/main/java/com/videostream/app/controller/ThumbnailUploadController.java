@@ -1,7 +1,7 @@
 package com.videostream.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.videostream.app.entities.ResponseClass;
+import com.videostream.app.service.ResponseClass;
 import com.videostream.app.entities.ThumbnailEntity;
 import com.videostream.app.repository.ThumbnailRepo;
 import org.springframework.http.HttpStatus;
@@ -56,7 +56,8 @@ public class ThumbnailUploadController {
         // Writing to file taking type and path as
         ImageIO.write(bufferedImage, thumbnailExtension, modifiedThumbnail);
 
-        this.thumbnailRepo.save(new ThumbnailEntity(thumbnailEntity.getThumbnailName(),thumbnailEntity.getVideoID(),thumbnailExtension));
+        this.thumbnailRepo.save(new ThumbnailEntity(thumbnailEntity.getThumbnailName(),
+                thumbnailEntity.getVideoID(),thumbnailExtension));
 
         thumbFile.delete();
 
