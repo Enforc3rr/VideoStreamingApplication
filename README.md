@@ -13,14 +13,16 @@ Reasons To Use ->
 ![System's Design](Architecture1.JPG)
 
 ### End Points
-| End Point          | HTTP Method   |           Description                   |
-| :---               |    :----:     |          ---:                           |
-| /video/upload      | POST          | To Upload Videos                        |
-| /video/fetch       | GET           | To Fetch All Available Videos           |
+| End Point          | HTTP Method   |           Description                   |  Required User registration |
+| :---               |    :----:     |          :---:                           | ---:   |
+| /video/upload      | POST          | To Upload Videos                        |  Yes |
+| /video/fetch       | GET           | To Fetch All Available Videos           | No   |
+| /video/user/registration | POST | To register the user |  No |
 
 
 ### Things Needed To Be Implemented In Future 
 - ~~Authentication-Authorization~~
+- The One who has uploaded can delete the videos
 - User Interface
 - Ability To Add Comments , Likes etc.
 
