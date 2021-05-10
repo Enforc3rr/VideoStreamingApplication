@@ -19,6 +19,17 @@ Reasons To Use ->
 | /video/fetch       | GET           | To Fetch All Available Videos           | No   |
 | /video/user/registration | POST | To register the user |  No |
 
+### Different Models 
+###### - User Registration Model
+username*
+password
+first name
+last name
+email*
+date of joining
+country where user belongs to
+role
+
 
 ### Things Needed To Be Implemented In Future 
 - ~~Authentication-Authorization~~
