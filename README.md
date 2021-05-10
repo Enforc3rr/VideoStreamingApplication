@@ -23,7 +23,6 @@ Reasons To Use ->
 - ~~Authentication-Authorization~~
 - User Interface
 - Ability To Add Comments , Likes etc.
-- 
 
 ### Issues
 1) Thumbnail Uploaded isn't getting converted to lower resolution.
