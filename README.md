@@ -20,7 +20,7 @@ Reasons To Use ->
 | /video/user/registration | POST | To register the user |  No |
 
 ### Different Models 
-###### - User Registration Model ( TO Pass in the Body of the 
+###### - User Registration Model ( TO Pass in the Body of the API)
 username*  
 password  
 firstName  
@@ -42,6 +42,7 @@ role
 
 ### Things to be taken care of before starting the project on your local computer.
 1) Setup the local MongoDB server with VideoStreamingApplcation Database.
-2) Make sure that you have changed the 
+2) Make Sure that you have downloaded the current version of [FFMPEG](https://www.ffmpeg.org/download.html) and make sure you have changed the path . 
+3) Make sure that you have changed the Input and Output file destination of the video that will be converted into different resolutions.
 
 
