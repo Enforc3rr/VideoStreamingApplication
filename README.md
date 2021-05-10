@@ -12,9 +12,18 @@ Reasons To Use ->
 ### Backend Architecture / System's Design
 ![System's Design](Architecture1.JPG)
 
+### End Points
+| End Point          | HTTP Method   |           Description                   |
+| :---               |    :----:     |          ---:                           |
+| /video/upload      | POST          | To Upload Videos                        |
+| /video/fetch       | GET           | To Fetch All Available Videos           |
+
+
 ### Things Needed To Be Implemented In Future 
 - ~~Authentication-Authorization~~
 - User Interface
+- Ability To Add Comments , Likes etc.
+- 
 
 ### Issues
 1) Thumbnail Uploaded isn't getting converted to lower resolution.
