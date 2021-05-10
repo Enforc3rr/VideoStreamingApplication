@@ -6,15 +6,15 @@ Unlike Tik-Tok This Application is going to be targeted more towards educational
 ### Tech Stack
 This Project uses uses Server Side Capabilities of Nodejs and Spring Boot.       
 Reasons To Use ->    
-1) Java for Upload and Conversion Of videos to Different Resolution Process
-2) Nodejs for Playback
+1) Java for All Kinds of Upload and Conversion Of videos to Different Resolution Process as this process is CPU intensive.So,it's better to handle it in Java.
+2) Nodejs for Playback , Authentication-Authorization as these are just some simple I/O operations which NodeJs is pretty good at.
 
 ### Backend Architecture / System's Design
 ![System's Design](Architecture1.JPG)
 
 ### Things Needed To Be Implemented In Future 
-1) Authentication-Authorization
-2) User Interface
+- ~~Authentication-Authorization~~
+- User Interface
 
 ### Issues
 1) Thumbnail Uploaded isn't getting converted to lower resolution.
