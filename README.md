@@ -20,24 +20,28 @@ Reasons To Use ->
 | /video/user/registration | POST | To register the user |  No |
 
 ### Different Models 
-###### - User Registration Model
-username*
-password
-first name
-last name
-email*
-date of joining
-country where user belongs to
-role
+###### - User Registration Model ( TO Pass in the Body of the 
+username*  
+password  
+firstName  
+lastName  
+email*    
+countryOfUser   
+role   
 
 
 ### Things Needed To Be Implemented In Future 
 - ~~Authentication-Authorization~~
 - The One who has uploaded can delete the videos
 - User Interface
+- Handling Exceptions  
 - Ability To Add Comments , Likes etc.
 
 ### Issues
 1) Thumbnail Uploaded isn't getting converted to lower resolution.
+
+### Things to be taken care of before starting the project on your local computer.
+1) Setup the local MongoDB server with VideoStreamingApplcation Database.
+2) Make sure that you have changed the 
 
 
