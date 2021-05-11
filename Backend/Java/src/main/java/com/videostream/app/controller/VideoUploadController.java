@@ -2,14 +2,19 @@ package com.videostream.app.controller;
 
 import com.coremedia.iso.IsoFile;
 import com.videostream.app.entities.FileEntity;
+import com.videostream.app.entities.ThumbnailEntity;
+import com.videostream.app.repository.ThumbnailRepo;
+import com.videostream.app.repository.UserRepo;
 import com.videostream.app.service.ResponseClass;
 import com.videostream.app.repository.FileRepo;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,10 +30,17 @@ public class VideoUploadController {
 
     final
     FileRepo fileRepo;
+    final
+    ThumbnailRepo thumbnailRepo;
+    final
+    UserRepo userRepo;
 
-    public VideoUploadController(FileRepo fileRepo) {
+    public VideoUploadController(FileRepo fileRepo, UserRepo userRepo, ThumbnailRepo thumbnailRepo) {
         this.fileRepo = fileRepo;
+        this.userRepo = userRepo;
+        this.thumbnailRepo = thumbnailRepo;
     }
+
     /*
     @desc  To Upload Videos
     @route POST /video/upload
@@ -82,8 +94,8 @@ public class VideoUploadController {
        }
     }
     /*
-    @desc If Upload Doesn't fail then call this end point to associate details of video with it.
-    @Post /video/details
+    @desc  If Upload Doesn't fail then call this end point to associate details of video with it.
+    @route Post /video/details
     File Name
     Video Length
     Uploaded By
@@ -172,6 +184,50 @@ public class VideoUploadController {
                 .done();
         FFmpegExecutor fFmpegExecutor = new FFmpegExecutor(fFmpeg,fFprobe);
         fFmpegExecutor.createJob(fFmpegBuilder).run();
+    }
+    /*
+    @desc To Delete The Video
+    @route DELETE /video/delete/id
+    */
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteVideo(@PathVariable("id") String videoId , Authentication authentication){
+        FileEntity fileToDelete = this.fileRepo.findById(videoId).get();
+//        ThumbnailEntity thumbnailToDelete = this.thumbnailRepo.findB
+        if(fileToDelete.getVideoUploadedBy().equals(authentication.getName())){
+            System.out.println("Entered");
+            Thread toDelete240p = new Thread(()->{
+                deleteVideos("240p",fileToDelete.getFileName());
+            });
+            Thread toDelete480p = new Thread(()->{
+                deleteVideos("480p",fileToDelete.getFileName());
+            });
+            Thread toDelete1080p = new Thread(()->{
+                deleteVideos("1080p",fileToDelete.getFileName());
+            });
+            //Name Of Thumbnail Matches the videoID.
+//            Thread toDeleteThumbnail = new Thread(() -> {
+//                deleteThumbnail(videoId);
+//            });
+
+            //Starting The Threads.
+            toDelete240p.start();
+            toDelete480p.start();
+            toDelete1080p.start();
+//            toDeleteThumbnail.start();
+            this.fileRepo.deleteByFileName(fileToDelete.getFileName());
+            return new ResponseEntity<>("Deletion Successful",HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>("File was Not Found or Has Already Been Deleted",HttpStatus.BAD_REQUEST);
+    }
+    private static void deleteVideos(String resolution,String fileName){
+        String videoLocation = "D:\\Programs\\VideoStreamingApplication\\Backend\\VideoUploads\\"+resolution+"\\"+resolution+fileName;
+        File videoToDelete = new File(videoLocation);
+        videoToDelete.delete();
+    }
+    private static void deleteThumbnail(String thumbnailName){
+        String thumbnailLocation = "D:\\Programs\\VideoStreamingApplication\\Backend\\ThumbnailUploads"+thumbnailName;
+        File thumbnailToDelete = new File(thumbnailLocation);
+        thumbnailToDelete.delete();
     }
 }
 

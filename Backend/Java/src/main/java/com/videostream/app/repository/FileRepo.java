@@ -4,4 +4,5 @@ import com.videostream.app.entities.FileEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface FileRepo extends MongoRepository<FileEntity , String> {
+    FileEntity deleteByFileName(String fileName);
 }
