@@ -27,7 +27,10 @@ exports.getVideos = async (req, res, next) =>{
     next();
 };
 /*
-Header Contains -
+@desc  Streaming API
+@route GET /playback/:id
+
+@Header Contains -
 Range :bytes=0-
 Playback Resolution which will decide and request for the resolution of file .
 */
@@ -74,6 +77,16 @@ const findFileName = async (_id)=>{
     const fName = await mongodb.findById(_id);
     return fName.fileName;
 }
+
+// /*
+//
+// */
+// exports.deleteVideo = async (req,res,next)=>{
+//     const videoToDelete = await mongodb.findById(req.params.id);
+//     if(!videoToDelete) return res.status(400).json({message : "Video Does Not Exist or Has Already Been Deleted"});
+//     console.log(req.user);
+//     console.log(videoToDelete.fileName);
+// }
 
 
 exports.videoPlayBackEndPointTest = (req,res,next)=>{

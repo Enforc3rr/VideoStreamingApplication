@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const router = require('./router/VideoFetchRouter');
+const router = require('./router/router');
 const logger = require("morgan");
 const dbConfig = require("./configurations/databaseConfig");
 
