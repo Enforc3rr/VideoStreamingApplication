@@ -13,11 +13,11 @@ Reasons To Use ->
 ![System's Design](Architecture1.JPG)
 
 ### End Points
-| End Point          | HTTP Method   |           Description                   |  Required User registration |
-| :---               |    :----:     |          :---:                           | ---:   |
-| /video/upload      | POST          | To Upload Videos                        |  Yes |
-| /video/fetch       | GET           | To Fetch All Available Videos           | No   |
-| /video/user/registration | POST | To register the user |  No |
+| End Point      |   Port Number | HTTP Method   |           Description                   |  Required User registration |
+| :---            | :----:  |    :----:     |          :----:                           | ---:   |
+| /video/upload    | 8080 | POST          | To Upload Videos                        |  Yes |
+| /video/fetch      | 8000 | GET           | To Fetch All Available Videos           | No   |
+| /video/user/registration|8000 | POST | To register the user |  No |
 
 ### Different Models 
 ###### - User Registration Model ( TO Pass in the Body of the API)
