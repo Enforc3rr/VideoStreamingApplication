@@ -37,6 +37,7 @@ role
 - User Interface
 - Handling Some Exceptions  
 - Ability To Add Comments.
+- OAuth Authentication 
 
 ### Issues
 1) Thumbnail Uploaded isn't getting converted to lower resolution.
