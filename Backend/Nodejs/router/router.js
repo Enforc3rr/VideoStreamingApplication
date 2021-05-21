@@ -8,15 +8,18 @@ const {userRegistration , userLogin} = require("../controller/userController");
 const verifyToken = require("../router/verifyToken");
 
 
+//To Fetch The Videos From Database
 router.route("/fetch")
     .get(getVideos);
+//Streaming API - Requires HTML5 Video Player TO Operate Properly along with proper headers
 router.route("/playback/:id")
     .get(verifyToken,playVideo);
+//To Fetch Thumbnails .
 router.route("/thumbnail/:id")
     .get(findThumbnail);
 
 
-//User Registration
+//User Registration and Login
 router.route("/user/registration")
     .post(userRegistration);
 router.route("/user/login")

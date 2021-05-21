@@ -1,7 +1,12 @@
 /*
+@Desc To Fetch Video Names
+@port 8000
+@route GET /video/fetch
 Id Of Video
 File Name
-Title/Caption of the video
+Title of the video
+Caption of the video
+Genre of the video
 Uploaded By
 Upload Time
 */
@@ -35,11 +40,10 @@ exports.getVideos = async (req, res, next) =>{
 
 @Header Contains -
 Range :bytes=0-
-Playback Resolution which will decide and request for the resolution of file .
+Playback Resolution which will decide and request for the resolution of file . (playbackresolution)
 */
 exports.playVideo = async (req,res,next)=>{
     const playbackResolution = req.headers.playbackresolution;
-    // const playbackResolution = "1080p";
     const range = req.headers.range;
     let flName = await findFileName(req.params.id);
     if(!range){

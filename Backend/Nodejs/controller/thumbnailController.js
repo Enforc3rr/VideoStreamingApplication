@@ -8,7 +8,6 @@ exports.findThumbnail = (req,res,next)=>{
             //We are basically now converting the object received into Object form ( Express.Json() is used for conversion of object received via JSON
             data = data.toObject();
             const {thumbnailName,thumbnailExtension} = data;
-
             res.download("D:\\Programs\\VideoStreamingApplication\\Backend\\ThumbnailUploads\\"+thumbnailName+"."+thumbnailExtension);
         })
         .catch(()=>{
