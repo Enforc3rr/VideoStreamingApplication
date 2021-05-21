@@ -1,7 +1,7 @@
 package com.videostream.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.videostream.app.service.ResponseClass;
+import com.videostream.app.Responses.UploadResponseClass;
 import com.videostream.app.entities.ThumbnailEntity;
 import com.videostream.app.repository.ThumbnailRepo;
 import org.springframework.http.HttpStatus;
@@ -61,7 +61,7 @@ public class ThumbnailUploadController {
 
         thumbFile.delete();
 
-        return new ResponseEntity<>(new ResponseClass("Passed", "Thumbnail Uploaded", null, thumbnailEntity.getThumbnailName())
+        return new ResponseEntity<>(new UploadResponseClass("Passed", "Thumbnail Uploaded", null, thumbnailEntity.getThumbnailName())
                 , HttpStatus.CREATED);
     }
 }

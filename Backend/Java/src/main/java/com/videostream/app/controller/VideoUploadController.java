@@ -1,17 +1,17 @@
 package com.videostream.app.controller;
 
 import com.coremedia.iso.IsoFile;
+import com.videostream.app.Responses.VideoAvailableResponseClass;
 import com.videostream.app.entities.FileEntity;
 import com.videostream.app.entities.ThumbnailEntity;
 import com.videostream.app.repository.ThumbnailRepo;
 import com.videostream.app.repository.UserRepo;
-import com.videostream.app.service.ResponseClass;
+import com.videostream.app.Responses.UploadResponseClass;
 import com.videostream.app.repository.FileRepo;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -74,12 +74,12 @@ public class VideoUploadController {
            uploadTime : null
            }
             */
-           return new ResponseEntity<>(new ResponseClass("Failed","File Not Uploaded"
+           return new ResponseEntity<>(new UploadResponseClass("Failed","File Not Uploaded"
                    ,"Enter A Video Of Less Than 120 Seconds",null,0,null),
                    HttpStatus.BAD_REQUEST);
        }else{
           /*
-          @StatusCode 201 ( Created )
+           @StatusCode 201 ( Created )
            @Response If Upload Is Successful (actual variable names are being used here)
            uploadStatus = Passed
            uploadMessage = File Uploaded
@@ -88,7 +88,7 @@ public class VideoUploadController {
            videoLength = length of video
            uploadTime = current time
             */
-           return new ResponseEntity<>( new ResponseClass("Passed","File Uploaded"
+           return new ResponseEntity<>( new UploadResponseClass("Passed","File Uploaded"
                    ,null,fileName,lengthOfVideo,date.toString()),
                    HttpStatus.CREATED);
        }
@@ -103,10 +103,7 @@ public class VideoUploadController {
     Upload Time
     */
     @PostMapping(value = "/details", consumes = "application/json")
-    public void videoDetails(@RequestBody FileEntity fileEntity) {
-
-        this.fileRepo.save(new FileEntity(fileEntity.getFileName(),fileEntity.getVideoLength(),fileEntity.getVideoUploadedBy()
-         , fileEntity.getCaptionOfVideo() , fileEntity.getUploadTime()));
+    public ResponseEntity<?> videoDetails(@RequestBody FileEntity fileEntity, Authentication authentication) throws IOException {
 
         Thread conversionTo480p = new Thread(() -> {
             try {
@@ -136,7 +133,30 @@ public class VideoUploadController {
         conversionTo240p.start();
         conversionTo480p.start();
         conversionTo1080p.start();
+        //Waiting for threads to finish their work
+        try {
+            conversionTo240p.join();
+            conversionTo480p.join();
+            conversionTo1080p.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //Deleting The temporary file stored in Database.
+        deleteTempVideo(fileEntity.getFileName());
+        //Saving the uploaded Details to the database
+        this.fileRepo.save(new FileEntity(fileEntity.getFileName(),fileEntity.getVideoLength(),authentication.getName(),fileEntity.getTitleOfVideo()
+                ,fileEntity.getCaptionOfVideo(),fileEntity.getUploadTime(),fileEntity.getGenreOfVideo()));
+        /*
+        @StatusCode 201 ( CREATED )
+        @Response As after video gets uploaded and is available in different resolutions . It will send out the required response. (inspired From Reddit)
+        uploadStatus passed
+        availabilityStatus Available
+        message Video uploaded is now available to be viewed
+        */
+        return new ResponseEntity<>(new VideoAvailableResponseClass("Passed","Available"
+                ,"Video uploaded is now available to be viewed"),HttpStatus.CREATED);
     }
+
     //Static Method to Convert the Uploaded Video into 480p resolution
     private static void conversionTo480p(String fileName) throws IOException {
         FFmpeg fFmpeg = new FFmpeg("D:\\ffmpeg-4.4-essentials_build\\bin\\ffmpeg.exe");
@@ -192,44 +212,60 @@ public class VideoUploadController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteVideo(@PathVariable("id") String videoId , Authentication authentication){
         FileEntity fileToDelete = this.fileRepo.findById(videoId).get();
-//        ThumbnailEntity thumbnailToDelete = this.thumbnailRepo.findB
+        ThumbnailEntity thumbnailToDelete = this.thumbnailRepo.findThumbnailEntityByVideoID(fileToDelete.get_id());
+
         if(fileToDelete.getVideoUploadedBy().equals(authentication.getName())){
             System.out.println("Entered");
             Thread toDelete240p = new Thread(()->{
-                deleteVideos("240p",fileToDelete.getFileName());
+                try {
+                    deleteVideos("240p",fileToDelete.getFileName());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             });
             Thread toDelete480p = new Thread(()->{
-                deleteVideos("480p",fileToDelete.getFileName());
+                try {
+                    deleteVideos("480p",fileToDelete.getFileName());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             });
             Thread toDelete1080p = new Thread(()->{
-                deleteVideos("1080p",fileToDelete.getFileName());
+                try {
+                    deleteVideos("1080p",fileToDelete.getFileName());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             });
             //Name Of Thumbnail Matches the videoID.
-//            Thread toDeleteThumbnail = new Thread(() -> {
-//                deleteThumbnail(videoId);
-//            });
+            Thread toDeleteThumbnail = new Thread(() -> {
+                try {
+                    deleteThumbnail(videoId);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
 
             //Starting The Threads.
             toDelete240p.start();
             toDelete480p.start();
             toDelete1080p.start();
-//            toDeleteThumbnail.start();
+            toDeleteThumbnail.start();
             this.fileRepo.deleteByFileName(fileToDelete.getFileName());
             return new ResponseEntity<>("Deletion Successful",HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>("File was Not Found or Has Already Been Deleted",HttpStatus.BAD_REQUEST);
     }
-    private static void deleteVideos(String resolution,String fileName){
+    private static void deleteVideos(String resolution,String fileName) throws IOException{
         String videoLocation = "D:\\Programs\\VideoStreamingApplication\\Backend\\VideoUploads\\"+resolution+"\\"+resolution+fileName;
-        File videoToDelete = new File(videoLocation);
-        videoToDelete.delete();
+        Files.deleteIfExists(Paths.get(videoLocation));
     }
-    private static void deleteThumbnail(String thumbnailName){
+    private static void deleteTempVideo(String fileName) throws IOException {
+        String videoLocation = "D:\\Programs\\VideoStreamingApplication\\Backend\\VideoUploads\\temp"+fileName;
+        Files.deleteIfExists(Paths.get(videoLocation));
+    }
+    private static void deleteThumbnail(String thumbnailName) throws IOException {
         String thumbnailLocation = "D:\\Programs\\VideoStreamingApplication\\Backend\\ThumbnailUploads"+thumbnailName;
-        File thumbnailToDelete = new File(thumbnailLocation);
-        thumbnailToDelete.delete();
+        Files.deleteIfExists(Paths.get(thumbnailLocation));
     }
 }
-
-
-

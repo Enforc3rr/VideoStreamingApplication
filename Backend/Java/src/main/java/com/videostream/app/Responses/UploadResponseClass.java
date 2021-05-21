@@ -1,4 +1,4 @@
-package com.videostream.app.service;
+package com.videostream.app.Responses;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,7 +17,7 @@ Video Name = Renamed Version Of The Video
 */
 
 @Document
-public class ResponseClass {
+public class UploadResponseClass {
     private String uploadStatus;
     private String uploadMessage;
     private String uploadReason;
@@ -25,10 +25,10 @@ public class ResponseClass {
     private long videoLength;
     private String UploadTime;
 
-    public ResponseClass(){
+    public UploadResponseClass(){
     }
-    public ResponseClass(String uploadStatus, String uploadMessage, String uploadReason,
-                         String fileName, long videoLength, String uploadTime) {
+    public UploadResponseClass(String uploadStatus, String uploadMessage, String uploadReason,
+                               String fileName, long videoLength, String uploadTime) {
         this.uploadStatus = uploadStatus;
         this.uploadMessage = uploadMessage;
         this.uploadReason = uploadReason;
@@ -36,7 +36,7 @@ public class ResponseClass {
         this.videoLength = videoLength;
         this.UploadTime = uploadTime;
     }
-    public ResponseClass(String uploadStatus, String uploadMessage, String uploadReason, String fileName) {
+    public UploadResponseClass(String uploadStatus, String uploadMessage, String uploadReason, String fileName) {
         this.uploadStatus = uploadStatus;
         this.uploadMessage = uploadMessage;
         this.uploadReason = uploadReason;
