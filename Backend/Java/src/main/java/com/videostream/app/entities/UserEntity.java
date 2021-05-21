@@ -1,5 +1,5 @@
 package com.videostream.app.entities;
-
+//To Work with the User Object received from the Database
 public class UserEntity {
     private String _id;
     private String username;

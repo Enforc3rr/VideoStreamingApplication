@@ -1,7 +1,7 @@
 package com.videostream.app.service;
 
 import com.videostream.app.entities.UserEntity;
-import com.videostream.app.repository.UserRepo;
+import com.videostream.app.dao.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

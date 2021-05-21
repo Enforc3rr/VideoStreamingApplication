@@ -4,10 +4,10 @@ import com.coremedia.iso.IsoFile;
 import com.videostream.app.Responses.VideoAvailableResponseClass;
 import com.videostream.app.entities.FileEntity;
 import com.videostream.app.entities.ThumbnailEntity;
-import com.videostream.app.repository.ThumbnailRepo;
-import com.videostream.app.repository.UserRepo;
+import com.videostream.app.dao.ThumbnailRepo;
+import com.videostream.app.dao.UserRepo;
 import com.videostream.app.Responses.UploadResponseClass;
-import com.videostream.app.repository.FileRepo;
+import com.videostream.app.dao.FileRepo;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
@@ -212,10 +212,9 @@ public class VideoUploadController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteVideo(@PathVariable("id") String videoId , Authentication authentication){
         FileEntity fileToDelete = this.fileRepo.findById(videoId).get();
-        ThumbnailEntity thumbnailToDelete = this.thumbnailRepo.findThumbnailEntityByVideoID(fileToDelete.get_id());
+//        ThumbnailEntity thumbnailToDelete = this.thumbnailRepo.findThumbnailEntityByVideoID(fileToDelete.get_id());
 
         if(fileToDelete.getVideoUploadedBy().equals(authentication.getName())){
-            System.out.println("Entered");
             Thread toDelete240p = new Thread(()->{
                 try {
                     deleteVideos("240p",fileToDelete.getFileName());
@@ -251,19 +250,30 @@ public class VideoUploadController {
             toDelete480p.start();
             toDelete1080p.start();
             toDeleteThumbnail.start();
+            try {
+                toDelete240p.join();
+                toDelete480p.join();
+                toDelete1080p.join();
+                toDeleteThumbnail.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             this.fileRepo.deleteByFileName(fileToDelete.getFileName());
             return new ResponseEntity<>("Deletion Successful",HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>("File was Not Found or Has Already Been Deleted",HttpStatus.BAD_REQUEST);
     }
+    //Static Function To delete Videos
     private static void deleteVideos(String resolution,String fileName) throws IOException{
         String videoLocation = "D:\\Programs\\VideoStreamingApplication\\Backend\\VideoUploads\\"+resolution+"\\"+resolution+fileName;
         Files.deleteIfExists(Paths.get(videoLocation));
     }
+    //Static Function To temp video files
     private static void deleteTempVideo(String fileName) throws IOException {
         String videoLocation = "D:\\Programs\\VideoStreamingApplication\\Backend\\VideoUploads\\temp"+fileName;
         Files.deleteIfExists(Paths.get(videoLocation));
     }
+    //static function to delete thumbnail
     private static void deleteThumbnail(String thumbnailName) throws IOException {
         String thumbnailLocation = "D:\\Programs\\VideoStreamingApplication\\Backend\\ThumbnailUploads"+thumbnailName;
         Files.deleteIfExists(Paths.get(thumbnailLocation));

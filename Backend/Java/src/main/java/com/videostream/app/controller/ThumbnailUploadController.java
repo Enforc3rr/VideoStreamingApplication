@@ -3,7 +3,7 @@ package com.videostream.app.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.videostream.app.Responses.UploadResponseClass;
 import com.videostream.app.entities.ThumbnailEntity;
-import com.videostream.app.repository.ThumbnailRepo;
+import com.videostream.app.dao.ThumbnailRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

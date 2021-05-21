@@ -1,4 +1,4 @@
-package com.videostream.app.repository;
+package com.videostream.app.dao;
 
 import com.videostream.app.entities.UserEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
