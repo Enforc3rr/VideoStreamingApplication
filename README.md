@@ -20,7 +20,7 @@ Reasons To Use ->
 | /video/user/registration|8000 | POST | To register the user |  No |
 
 ### Different Models 
-###### - User Registration Model ( TO Pass in the Body of the API)
+###### - User Registration Model ( To Pass in the Body of the API)
 username*  
 password  
 firstName  
@@ -28,6 +28,16 @@ lastName
 email*    
 countryOfUser   
 role   
+Here &ast; signify that those fields need to be unique.  
+
+###### - Video Details Model ( To Pass in the Body of the API)
+fileName*
+videoLength* 
+titleOfVideo
+captionOfVideo
+uploadTime*
+genreOfVideo
+Here &ast; signify that You Will Receive it as response if uploaded video is going to be of required criteria.   
 
 
 ### Things Needed To Be Implemented In Future 
