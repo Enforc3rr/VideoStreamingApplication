@@ -31,11 +31,12 @@ role
 
 
 ### Things Needed To Be Implemented In Future 
-- ~~Authentication-Authorization~~
-- The One who has uploaded can delete the videos
+- ~~Authentication-Authorization
+- ~~The One who has uploaded can delete the videos
+- ~~Adding Likes And DisLikes
 - User Interface
-- Handling Exceptions  
-- Ability To Add Comments , Likes etc.
+- Handling Some Exceptions  
+- Ability To Add Comments.
 
 ### Issues
 1) Thumbnail Uploaded isn't getting converted to lower resolution.
