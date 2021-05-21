@@ -5,7 +5,7 @@ const database = async ()=>{
         useNewUrlParser:true,
         useCreateIndex:true,
         useUnifiedTopology:true,
-        useFindAndModify:true,
+        useFindAndModify:false,
     });
     console.log(`Connected To Database`);
 }

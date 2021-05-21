@@ -2,17 +2,16 @@ const Express = require("express");
 
 const router = Express.Router();
 const{findThumbnail} = require("../controller/thumbnailController");
-const { getVideos , playVideo ,videoPlayBackEndPointTest , deleteVideo } = require("../controller/videoController");
+const { getVideos , playVideo ,videoPlayBackEndPointTest , videoLikeIncrease, videoDisLikeIncrease,
+    videoSearchByName } = require("../controller/videoController");
 const {userRegistration , userLogin} = require("../controller/userController");
 const verifyToken = require("../router/verifyToken");
 
 
 router.route("/fetch")
     .get(getVideos);
-
 router.route("/playback/:id")
     .get(verifyToken,playVideo);
-
 router.route("/thumbnail/:id")
     .get(findThumbnail);
 
@@ -23,15 +22,20 @@ router.route("/user/registration")
 router.route("/user/login")
     .post(userLogin);
 
-// //CRUD operations on Video And Video Details
-// router.route("/delete/:id")
-//     .delete(verifyToken,deleteVideo);
+//Video Like-DisLike
+router.route("/like/:id")
+    .post(verifyToken,videoLikeIncrease);
+router.route("/dislike/:id")
+    .post(verifyToken,videoDisLikeIncrease);
 
+//Searching Videos
+router.route("/search/:search")
+    .get(videoSearchByName);
 
 
 //For PlaybackTesting Purpose
-router.route("/video/test/:id")
-    .post(videoPlayBackEndPointTest);
+router.route("/test")
+    .get(videoPlayBackEndPointTest);
 
 
 module.exports = router;

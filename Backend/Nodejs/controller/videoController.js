@@ -13,11 +13,13 @@ exports.getVideos = async (req, res, next) =>{
     const videoDetail = [];
 
     videoData.forEach(data =>{
-        const {videoUploadedBy,captionOfVideo,uploadTime , _id,fileName} = data;
+        const {videoUploadedBy,captionOfVideo,uploadTime , _id,fileName,titleOfVideo,genreOfVideo} = data;
         const video = {
-            id : _id ,
+            _id : _id ,
             fName : fileName ,
+            title : titleOfVideo,
             caption : captionOfVideo,
+            genre : genreOfVideo ,
             uploadedBy : videoUploadedBy,
             uploadTime : uploadTime
         };
@@ -28,7 +30,8 @@ exports.getVideos = async (req, res, next) =>{
 };
 /*
 @desc  Streaming API
-@route GET /playback/:id
+@port  8000
+@route GET video/playback/:id
 
 @Header Contains -
 Range :bytes=0-
@@ -40,20 +43,16 @@ exports.playVideo = async (req,res,next)=>{
     const range = req.headers.range;
     let flName = await findFileName(req.params.id);
     if(!range){
-        res.status(400).json({message:"Range In Header Is Required"});
+        return  res.status(400).json({message:"Range In Header Is Required"});
     }
     if(!playbackResolution){
-        res.status(400).json({message:"Playback Resolution In Header Is Required"});
+       return  res.status(400).json({message:"Playback Resolution In Header Is Required"});
     }
-    let chunkSize = 0 ;
-    if(playbackResolution==="480p"){
-        chunkSize = 10001;
-    }else if(playbackResolution==="1080p"){
-        chunkSize = 100001;
-    }else{
-        chunkSize = 10001;
-    }
-    //Range = bytes=1234-
+    let chunkSize = 100001 ;
+    /*
+    Range = bytes=1234-
+    Initial Value is bytes=0-
+     */
     const videoPath = `D:\\Programs\\VideoStreamingApplication\\Backend\\VideoUploads\\${playbackResolution}\\${playbackResolution}${flName}`;
     const videoSize = fs.statSync(videoPath).size;
 
@@ -78,17 +77,49 @@ const findFileName = async (_id)=>{
     return fName.fileName;
 }
 
-// /*
-//
-// */
-// exports.deleteVideo = async (req,res,next)=>{
-//     const videoToDelete = await mongodb.findById(req.params.id);
-//     if(!videoToDelete) return res.status(400).json({message : "Video Does Not Exist or Has Already Been Deleted"});
-//     console.log(req.user);
-//     console.log(videoToDelete.fileName);
-// }
+/*
+@desc  To Increase The Like On The Selected Video
+@port  8000
+@route POST video/:id
+*/
+exports.videoLikeIncrease = (req,res,next)=>{
+    mongodb.updateOne({_id : req.params.id},{$inc : {likesOnVideo : 1}});
+    return res.status(200).json({message : `${req.params.id} Video Liked`});
+}
 
+/*
+@desc  To Increase The Like On The Selected Video
+@port  8000
+@route POST video/:id
+*/
+exports.videoDisLikeIncrease = async (req,res,next)=>{
+    await mongodb.updateOne({_id : req.params.id},{$inc : {dislikesOnVideo : 1}});
+    return res.status(200).json({message : `${req.params.id} Video Dis-Liked`});
+}
+/*
+@desc To search Videos based on content present in their title
+@port 8000
+@route GET video/search/:search
+*/
+exports.videoSearchByName = async (req,res,next)=>{
+    const searchResult = [];
+    //the i option perform a case-insensitive match
+    const videosBySearch = await mongodb.find({titleOfVideo : {$regex : req.params.search , $options:"i"}});
+    videosBySearch.forEach(data => {
+        data = data.toObject();
+        const {_id , videoUploadedBy , titleOfVideo , genreOfVideo} = data;
+        const modifiedData = {
+            _id,
+            uploadedBy:  videoUploadedBy,
+            title : titleOfVideo ,
+            genre : genreOfVideo
+        }
+        searchResult.push(modifiedData);
+    });
+    return res.status(200).json(searchResult);
+}
 
+//In Test.html file make sure to change the id in the src attribute.
 exports.videoPlayBackEndPointTest = (req,res,next)=>{
     res.sendFile("D:\\Programs\\VideoStreamingApplication\\Backend\\Nodejs\\VideoPlayBackEndPointTest\\"+"Test.html");
 }
