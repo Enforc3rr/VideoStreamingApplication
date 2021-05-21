@@ -31,9 +31,9 @@ role
 
 
 ### Things Needed To Be Implemented In Future 
-- ~~Authentication-Authorization
-- ~~The One who has uploaded can delete the videos
-- ~~Adding Likes And DisLikes
+- ~~Authentication-Authorization~~
+- ~~The One who has uploaded can delete the videos~~
+- ~~Adding Likes And DisLikes~~
 - User Interface
 - Handling Some Exceptions  
 - Ability To Add Comments.
