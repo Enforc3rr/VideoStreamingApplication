@@ -38,6 +38,7 @@ role
 - Handling Some Exceptions  
 - Ability To Add Comments.
 - OAuth Authentication 
+- Need To Add Web Server ( like Nginx ) which supports Reverse Proxy
 
 ### Issues
 1) Thumbnail Uploaded isn't getting converted to lower resolution.
