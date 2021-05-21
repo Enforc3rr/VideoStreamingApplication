@@ -212,7 +212,6 @@ public class VideoUploadController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteVideo(@PathVariable("id") String videoId , Authentication authentication){
         FileEntity fileToDelete = this.fileRepo.findById(videoId).get();
-//        ThumbnailEntity thumbnailToDelete = this.thumbnailRepo.findThumbnailEntityByVideoID(fileToDelete.get_id());
 
         if(fileToDelete.getVideoUploadedBy().equals(authentication.getName())){
             Thread toDelete240p = new Thread(()->{
@@ -258,6 +257,7 @@ public class VideoUploadController {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            this.thumbnailRepo.deleteByVideoID(fileToDelete.get_id());
             this.fileRepo.deleteByFileName(fileToDelete.getFileName());
             return new ResponseEntity<>("Deletion Successful",HttpStatus.NO_CONTENT);
         }
