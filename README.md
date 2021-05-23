@@ -20,6 +20,7 @@ Reasons To Use ->
 | /video/thumbnailUpload    | 8080 | POST          | To Upload Thumbnail                        |  Yes |
 | /video/upload    | 8080 | DELETE          | To Delete Uploaded Videos and thumbnail corresponding to it |  Yes |
 | /video/fetch      | 8000 | GET           | To Fetch All Available Videos           | No   |
+| /video/thumbnail/:id      | 8000 | GET           | To Fetch thumbnail associated with a video  | No   |
 | /video/user/registration|8000 | POST | To register the user |  No |
 | /video/user/login|8000 | POST | for User Login returns jwt in response |  No |
 | /video/search/:keyword|8000 | GET | For Video Playback |  No |
