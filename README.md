@@ -1,4 +1,5 @@
-# Mini-Youtube
+![Logo](Logo.JPG)
+# VideoStreamingApplication
 ### Purpose Of This Application 
 These days trend of short videos are on rise youtube recently realsed "Shorts" . So , taking inspiration from Youtube Shorts I decided to make this application which will allow user to upload 120 secs video .
 Unlike Tik-Tok This Application is going to be targeted more towards educational and travel content ( [FireShip.io](https://www.youtube.com/channel/UCsBjURrPoezykLs9EqgamOA) is the living example that educational videos don't need to be long to make it's point)
@@ -72,5 +73,3 @@ thumbnailExtension
 
 
 ##### If you are a front-end developer pls go through different controller classes to learn about different responses and requests.
-
-
