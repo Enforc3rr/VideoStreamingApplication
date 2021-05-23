@@ -10,7 +10,7 @@ Reasons To Use ->
 2) Nodejs for Playback , Authentication-Authorization as these are just some simple I/O operations which NodeJs is pretty good at.
 
 ### Backend Architecture / System's Design
-![System's Design](Architecture1.JPG)
+![System's Design](Architecture1.jpg)
 
 ### End Points
 | End Point      |   Port Number | HTTP Method   |           Description                   |  Required User registration |
