@@ -24,7 +24,7 @@ Reasons To Use ->
 | /video/thumbnail/:id      | 8000 | GET           | To Fetch thumbnail associated with a video  | No   |
 | /video/user/registration|8000 | POST | To register the user |  No |
 | /video/user/login|8000 | POST | for User Login returns jwt in response |  No |
-| /video/search/:keyword|8000 | GET | For Video Playback |  No |
+| /video/search/:keyword|8000 | GET | For Video Search |  No |
 | /video/playback/:id|8000 | GET | For Video Playback |  Yes |
 | /video/like/:id|8000 | POST | For Liking The Video |  Yes |
 | /video/dislike/:id|8000 | POST | For Dis-Liking The Video |  Yes |
