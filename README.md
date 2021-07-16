@@ -10,6 +10,11 @@ Reasons To Use ->
 1) Java for All Kinds of Upload and Conversion Of videos to Different Resolution Process as this process is CPU intensive.So,it's better to handle it in Java.
 2) Nodejs for Playback , Authentication-Authorization as these are just some simple I/O operations which NodeJs is pretty good at.
 
+
+### Updates :
+- Added Redis Support For Verifying JWT's origin ( By Storing IP of the logged in user in redis cache memory and matching it up during subsequent Requests)
+
+
 ### Backend Architecture / System's Design
 ![System's Design](Architecture1.jpg)
 
@@ -57,6 +62,7 @@ thumbnailExtension
 - ~~Authentication-Authorization~~
 - ~~The One who has uploaded can delete the videos~~
 - ~~Adding Likes And DisLikes~~
+- ~~JWT's Origin Verification~~
 - User Interface
 - Handling Some Exceptions  
 - Ability To Add Comments.
