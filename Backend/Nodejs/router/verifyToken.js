@@ -13,13 +13,13 @@ const verifyToken = async (req,res,next)=>{
     try{
         //Extracting Actual Token
         const token = requestTokenHeader.substring(7);
-        //verifying Details
+        const jwtDetails = await jwt.verify(token , Buffer.from("secretkey", 'base64'));
 
+        //verifying Details
         //Getting IP Stored in Database For Corresponding username
         redisClient.get(jwtDetails.sub, async(error,ip)=>{
             //checking if stored IP is same as the one in database if that's the case then verify the token
             if(ip===requestIp.getClientIp(req)){
-                const jwtDetails = await jwt.verify(token , Buffer.from("secretkey", 'base64'));
                 req.user = await userModel.findOne({
                     username : jwtDetails.sub
                 });
