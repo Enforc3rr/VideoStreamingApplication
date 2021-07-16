@@ -1,5 +1,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const redis = require("redis");
+const redisClient = redis.createClient(); // since I am using Locally Hosted Redis Server . SO , I don't need to specify URL
+const requestIp = require("request-ip");
 const userModel = require("../database/userModel");
 const {userRegistrationValidation} = require("../configurations/userValidation");
 /*
@@ -44,7 +47,7 @@ username
         status : "Passed",
         Message : "User Registered",
         username
-    })
+    });
 }
 /*
 @desc For User Login
@@ -52,6 +55,7 @@ username
 @route POST /video/user/login
 */
 exports.userLogin = async (req,res,next)=>{
+
     const userFound  = await userModel.findOne({username : req.body.username});
     /*
         @Response if Username is not found {
@@ -87,15 +91,25 @@ exports.userLogin = async (req,res,next)=>{
        {expiresIn: "24h"}
    );// need to replace "secret-key" with process.env.SECRET_KEY and it should of longer length and should be more complex.
 
-   //Made Changes in the sign method and removed the line which put "typ" : "JWT" in the header of the final jwt to make it compatible with spring.
-    /*
-    @Response if User is found {
-    jwt : token ,
-    successfulLogin : true
+    const ip = requestIp.getClientIp(req);
+    if(ip){
+        //saving username as key - ip as value in redis database and setting expiration time to 24 hours.
+        redisClient.setex(userFound.username,86400,ip);
+        //Made Changes in the sign method and removed the line which put "typ" : "JWT" in the header of the final jwt to make it compatible with spring.
+        /*
+        @Response if User is found {
+        jwt : token ,
+        successfulLogin : true
+        }
+        */
+        return res.header("Authorization",token).json({
+            jwt : token ,
+            successfulLogin : true
+        });
+    }else{
+        return res.status(400).json({
+            success : false ,
+            message : "IP Address Error"
+        });
     }
-    */
-   res.header("Authorization",token).json({
-       jwt : token ,
-       successfulLogin : true
-   });
 }

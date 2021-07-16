@@ -52,7 +52,7 @@ exports.playVideo = async (req,res,next)=>{
     if(!playbackResolution){
        return  res.status(400).json({message:"Playback Resolution In Header Is Required"});
     }
-    let chunkSize = 100001 ;
+    let chunkSize = 100001 ; // 1MB
     /*
     Range = bytes=1234-
     Initial Value is bytes=0-
@@ -65,6 +65,8 @@ exports.playVideo = async (req,res,next)=>{
     const end = Math.min(chunkSize+start,videoSize-1);
 
     const contentLength = end - start + 1 ;
+
+    //HTM
 
     const headers = {
         "Content-Range":`bytes ${start}-${end}/${videoSize}`,
